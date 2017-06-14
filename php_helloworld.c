@@ -53,6 +53,7 @@ PHP_FUNCTION(php_helloworld) {
     zend_long pos = 0;
     zval *zndocs = { 0 };
     zval *zcallbacks = { 0 };
+    char comment[4096];
 
     int i;
     int c = 0;
@@ -87,15 +88,18 @@ PHP_FUNCTION(php_helloworld) {
 
     c = split(buff, ' ', &arr);
 
-    char comment[1024];
-
     for (i = 0; i < c; i++) {
 
-        if(i < 4) {
-            comment += arr[i];
+        if (i > 6) {
+            sprintf(comment + strlen(comment), " %s", arr[i]);
         }
-        php_printf("string #%d: %s\n", i, arr[i]);
+        php_printf("string #%d: %s\n", i,  arr[i]);
     }
-    php_printf("Cooment: %s\n", comment);
+
+    memmove(comment, comment+1, strlen(comment));
+
+    php_printf("Author: %s %s\n", arr[2], arr[3]);
+    php_printf("Commit hash: %s\n", arr[1]);
+    php_printf("Commit message: %s\n", comment);
 }
 
